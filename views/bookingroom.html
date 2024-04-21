@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/sweetalert2@11.js"></script>
+
+    <style>
+        .room-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .room-card {
+            padding: 30px;
+            width: 400px;
+            /* height: 300px; */
+            margin: 10px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .room-card img {
+            width: 100% !important;
+            height: 200px !important;
+        }
+        .room-details {
+            padding: 15px;
+            background-color: #ffffff;
+        }
+        .room-details p {
+            margin: 0;
+            text-align: left;
+        }
+        .room-details a {
+            margin: 0;
+            float: inline-end;
+        }
+        .reserve-btn {
+            padding: 5px 0;
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        .reservation-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 400px;
+        }
+        .reserved {
+            opacity: 0.5;
+        }
+        .reserved-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .reserved-text {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+        .tab-bar {
+    background-color: #9A1212;
+    color: #fff;
+    padding: 20px;
+    padding-left: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tab-bar button {
+    background-color: #BB3838;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 20px;
+    margin-left: 30px;
+    border-radius: 3px;
+}
+.tab-bar button:hover {
+    background-color: #454343;
+}
+.tab-bar .right-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.tab-bar .right-links a:hover {
+    color: #F39595;
+}
+.tab-bar .right-links a:not(:first-child)::before {
+  content: '|';
+  margin-right: 10px;
+  color: #BC9945; /* Change the color here */
+}
+.container{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+table {
+    
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th{
+        border-bottom: 1px solid #F1D9A0;
+        background-color: #CCA046;
+      color: #000000;
+    }
+    td{
+        border-bottom: 3px solid #F1D9A0;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      font-size: 15px;
+    }
+    footer {
+    margin-top: 150px;
+    padding: 30px;
+    background-color: #9A1212;
+    width: 100%;
+}
+#con {
+    display: flex;
+    justify-content: space-between;
+}
+.address {
+    text-align: left;
+    flex-grow: 1;
+}
+.contact {
+    margin-left: 100px;
+}
+
+.library-hour {
+    margin-left: 100px;
+}
+
+.relate {
+    text-align: right;
+    flex-grow: 1;
+}
+h3{ 
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-left: 100px;
+}
+.search-container {
+            margin: 20px;
+      flex: 1; /* Takes remaining space */
+      text-align: right; /* Aligns search box to the right */
+      position: relative; /* Relative positioning for the search icon */
+    }
+    #searchInput {
+      background-color: #F9FBFF;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px; /* Adjust width as needed */
+      transition: width 0.4s ease-in-out; /* Smooth transition on width change */
+    }
+
+    #searchInput:focus {
+      width: 300px; /* Expands width on focus */
+    }
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+    </style>
+    
+</head>
+<body>
+    <!-- header -->
+    <div class="tab-bar">
+        <div><h2>Booking room</h2></div>
+        <div class="right-links">
+          <img src="/public/img/notification-bell.png " width="30" height="30" >
+          <a id="h" style="color:#F39595;"href="#" >Home</a>
+          <a id="ma" href="#" >My account</a>
+          <a id="mb" href="#" >My booking</a>
+          <button class="btn btn-danger" id="btnLogout">Log out</button>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <img src="/public/img/search 1.png" width="20px" height="20px" class="search-icon">
+      <input type="text" id="searchInput" onkeyup="search()" placeholder="Search">
+      </div>
+
+<!-- nav bar -->
+<h3>Rooms availability</h3>
+<div class="container" >
+    <div class="room-container">
+       <div class="row" id="tbody">
+
+       </div>
+    </div>
+</div>
+
+<!-- Reservation Form Popup -->
+<div class="overlay" id="reservationModal" style="display: none;">
+    <div class="reservation-form">
+        <h4>Booking Details</h4>
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="bookingName">Name:</label>
+                <input type="text" class="form-control" id="bookingName" required>
+            </div>
+            <div class="form-group">
+                <label for="bookingDate">Date:</label>
+                <input type="date" class="form-control" id="bookingDate" required>
+            </div>
+            <div class="form-group">
+                <label for="bookingTime">Time:</label>
+                <select class="form-control" id="bookingTime" required>
+                    <option value="8-10">8-10</option>
+                    <option value="10-12">10-12</option>
+                    <option value="12-2">12-2</option>
+                    <option value="2-4">2-4</option>
+                    <option value="4-6">4-6</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="agenda">Meeting Agenda:</label>
+                <textarea class="form-control" id="agenda" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="bookRoom()">Book Now</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            <input type="hidden" id="roomId" value="">
+        </form>
+    </div>
+</div>
+
+
+<!---Footer-->
+<footer class="text-white" style="font-size: small;">
+    <div class="container" id="con">
+        <div class="address">
+            <h5>Address </h5>
+            <span class="description">Mae Fah Luang University 333 Moo 1 Tasud sub<br> District, Mueang District
+                Chiang Rai 57100</span>
+        </div>
+        <div class="contact">
+            <h5>Contact</h5>
+            <span class="description">Tel 053316335<br> E-mail ask.library@mfu.ac.th</span>
+        </div>
+        <div class="library-hour">
+            <h5>Library Hour</h5>
+            <span class="description">Monday - Friday 8:00 — 19:30<br>Saturday - Sunday 10:00 — 18:00<br>"Living &
+                Learning Zone" and "M-Learning Space" are open 08.00-22.00 hrs.</span>
+
+        </div>
+        <div class="relate">
+            <h5 class="mx-2">Relate Website</h5>
+            <span class="description">Mae Fah Luang University</span>
+
+        </div>
+    </div>
+</footer>
+
+<script src="/public/js/bookingroom.js"></script>
+
+
+
+</body>
+</html>
